@@ -17,12 +17,12 @@ class Time(object):
         self.hour = h
         self.minute = m
         self.second = s
-        if self.validate():
+        if not self.validate():
             raise ValueError("Bad time data")
 
+   
     def print_time(self):
-        print '%.2d:%.2d:%.2d' % (self.hour, self.minute,
-                                  self.second)
+        print('%.2d:%.2d:%.2d' % (self.hour, self.minute, self.second))
 
     def time_to_int(self):
         """Computes the number of seconds since midnight.
@@ -35,7 +35,7 @@ class Time(object):
     def validate(self):
         """Checks whether a Time object satisfies the invariants.
         """
-        if self.hour <= 0 or self.minute <= 0 or self.second <= 0:
+        if self.hour <= 0 or self.minute < 0 or self.second < 0:
             return False
         elif self.minute > 60 or self.second > 60:
             return False
@@ -46,8 +46,8 @@ class Time(object):
 def add_times(t1, t2):
     """Adds two time objects.
     """
-    assert valid_time(t1) and valid_time(t2)
-    seconds = time_to_int(t1) + time_to_int(t2)
+    assert t1.validate() and t2.validate()
+    seconds = t1.time_to_int() + t2.time_to_int()
     return int_to_time(seconds)
 
 
@@ -65,19 +65,19 @@ def main():
     # if a movie starts at noon...
     noon_time = Time(12, 1, 1)
 
-    print 'Starts at',
-    print_time(noon_time)
+    print('Starts at')
+    noon_time.print_time()
 
     # and the run time of the movie is 109 minutes...
     movie_minutes = 109
     run_time = int_to_time(movie_minutes * 60)
-    print 'Run time',
-    print_time(run_time)
+    print('Run time')
+    run_time.print_time()
 
     # what time does the movie end?
     end_time = add_times(noon_time, run_time)
-    print 'Ends at',
-    print_time(end_time)
+    print('Ends at')
+    end_time.print_time()
 
 if __name__ == '__main__':
     main()
